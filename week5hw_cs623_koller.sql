@@ -77,7 +77,7 @@ question 5 :  #prods whose price is between $250.00 and $400.00.
 SELECT prod FROM stock
 INTERSECT 
 SELECT prod FROM product
-WHERE price > 250 AND price < 400;   
+WHERE product.price > 250 AND product.price < 400;   
 
 
 /*
@@ -110,9 +110,30 @@ question 10 : Products names stocked in at least 3 depots.
 (a) using count
 (b) without using count
 */
+--- a --- 
+-- SELECT pname, COUNT(dep) FROM product 
+-- INNER JOIN stock 
+-- WHERE product.prod = stock.prod
+-- AND COUNT(stock.dep) > 2;
+
+
+-- SELECT word, COUNT(*) AS cnt
+-- FROM words
+-- GROUP BY word
+-- HAVING cnt > 1
+
+-- SELECT name, price, photo
+-- FROM drinks, drinks_photos
+-- WHERE drinks.id = drinks_id 
+-- GROUP BY drinks_id
+
+--- b --- 
 
 /*
 question 11 : #prod stocked in all depots.
 (a) using count
 (b) using exists/not exists
 */
+--- a --- 
+
+--- b --- 
