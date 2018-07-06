@@ -116,27 +116,3 @@ question 11 : #prod stocked in all depots.
 (a) using count
 (b) using exists/not exists
 */
-
-INSERT INTO table(column_list)
-VALUES("p1","",);
-
-
---- already there --- 
-INSERT INTO depot(dep, addr, volume)
-VALUES("d1","New York",9000);
-
---- primary parent is prod --- 
-INSERT INTO product(prod,pname,price)
-VALUES("p1","tape",3);
-
---- children foreign keys are prod and dep --- 
-INSERT INTO stock(prod,dep,quantity)
-VALUES("p1","d1",1000);
-
-INSERT INTO stock(prod,dep,quantity)
-VALUES("p1","d2",-100);
-
-INSERT INTO stock(prod,dep,quantity)
-VALUES("p1","d4",1200);
-
-
