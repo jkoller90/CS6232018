@@ -1,63 +1,23 @@
-/*
-http://www.mysqltutorial.org/stored-procedures-loop.aspx
+/*10. Products names stocked in at least 3 depots.
+(a) using count*/
 
-using count: https://stackoverflow.com/questions/3937283/mysql-count-occurrences-greater-than-2#3937298
+SELECT pname FROM Product
+WHERE prod IN 
+(SELECT prod FROM Stock GROUP BY prod HAVING COUNT(dep)>=3);
 
-question 10 : Products names stocked in at least 3 depots.
-(a) using count 
-(b) without using count
-*/
---- a --- 
+/*(b) without using count*/
 
-SELECT pname as name FROM product;
-
-
-SELECT pname  
-FROM product 
-INNER JOIN
-(SELECT COUNT(dep) 
-	FROM stock) AS dep_count 
-	WHERE 
-	NOT IN (0,1,2);
---- b --- 
-
-			/* Collect CONCAT_ of some kind and then WHERE or HAVING for the resultant  
-				 string. 
-				 		SELECT CONCAT_(",", x,y) */ 	
-
-/*
-SELECT pname  
-FROM product 
-INNER JOIN 
-stock 
-(SELECT COUNT(dep) FROM stock ) as dep_count 
+SELECT pname FROM Product WHERE prod IN
+(SELECT S1.prod FROM Stock S1, Stock S2, Stock S3 WHERE
+S1.dep <> S2.dep AND S1.dep <> S3.dep AND S2.dep <> S3.dep AND S1.prod = S2.prod AND S2.prod = S3.prod);
 
 
-Note the use of the LEFT JOIN to ensure all tags are counted, 
-even the unused ones. The coalesce-function will convert 
-NULL to 0.
-*/
+/*11. #prod stocked in all depots.
+(a) using count*/
 
-/*
-question 11 : #prod stocked in all depots.
-(a) using count
-(b) using exists/not exists
-*/
+SELECT prod FROM Stock GROUP BY prod HAVING COUNT(dep)= (SELECT COUNT(*) FROM Depot);
 
---- a --- 
-			/* COUNT(n) = 3 or IN (3)  */ 	
---- b --- 
-			/* Collect CONCAT_ of some kind and then WHERE or HAVING for the resultant  
-				 string - this one would ask for a full string  
-				 				 		SELECT CONCAT_(",", x,y) */ 
-
-
-
-/*
-GROUP_CONCAT(DISTINCT expression
-    ORDER BY expression
-    SEPARATOR sep);
-
-separator is a comma by default but it's best to know what it is
-
-*/
+/*(b) using exists/not exists*/
+SELECT prod FROM Product P WHERE EXISTS 
+(SELECT prod FROM Stock S WHERE P.prod = S.prod GROUP BY prod 
+HAVING COUNT(dep) = (SELECT COUNT(*) FROM Depot ));
